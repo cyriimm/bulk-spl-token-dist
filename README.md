@@ -1,11 +1,22 @@
-# SPL Token Wallet
+# BULK-SPL-Token-Distributor
 
-Example Solana wallet with support for [SPL tokens](https://spl.solana.com/token) and Serum integration.
+To run:
 
-See [sollet.io](https://www.sollet.io) or the [Sollet Chrome Extension](https://chrome.google.com/webstore/detail/sollet/fhmfendgdocmcbmfikdcogofphimnkno) for a demo.
+# yarn install
+# yarn start
+# Login with sollet
+# Select a token 
+# Select Send
+# Enter an Amount (This will be the amount sent per wallet) 
+# Upload a csv( comma separated) file of public keys to send to 
+# The process of bulk sending will begin thereafter (there is no need to click on 'Send') 
+# If a transaction(tx) fails the receiver address will be logged in the error box 
 
-Wallet keys are stored in `localStorage`, optionally encrypted by a password.
+Potential Upgrades
 
-Run `yarn start` to start a development server or `yarn build` to create a production build that can be served by a static file server.
+# Sometimes a tx will show a 'timeout' error (but still have processed successfully --> In this case the receiver address will still appear in the error box <> Fix here is to account for this as not being an 'error'
 
-See the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started) for other commands and options.
+# Allow for a different amount to be sent per wallet. This could be done by having another column in the csv that is parsed with an amount next to each public key wallet address
+
+# Have a CLI version that accepts a json or csv input and can be run from the terminal (with logging of error transaction receiver addresses) 
+
