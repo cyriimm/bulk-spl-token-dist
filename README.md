@@ -2,8 +2,8 @@
 
 To run:
 
-- npm install
-- npm start
+- yarn install
+- yarn start
 - Login with sollet
 - Select a token 
 - Select Send
