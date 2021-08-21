@@ -18,5 +18,7 @@ To run:
 
 - Allow for a different amount to be sent per wallet. This could be done by having another column in the csv that is parsed with an amount next to each public key wallet address
 
+- Allow for a different token to be sent per wallet. This could be done by having another column in the csv that is parsed with the token address next to each public key wallet address. This is particularly good for when dealing with NFT launches.
+
 - Have a CLI version that accepts a json or csv input and can be run from the terminal (with logging of error transaction receiver addresses) 
 
