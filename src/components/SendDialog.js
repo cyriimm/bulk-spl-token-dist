@@ -259,8 +259,8 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [setOverrideDestinationCheck]);
 
 
-  async function makeTransaction2(address) {
-    let amount = Math.round(parseFloat(transferAmountString) * 10 ** decimals);
+  async function makeTransaction2(address, transformaount) {
+    let amount = Math.round(parseFloat(transformaount) * 10 ** decimals);
     console.log(amount);
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
@@ -303,35 +303,41 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   async function bulkSend(){
 
 
-    // if(csv!=null){
+    if(csv!=null){
 
-    //   let split = csv[0];
-    //   console.log(split);
 
-    //   for(let i=0; i<split.length; i++){
-    //     try{
+      for (let j=0; j<csv.length; j++){
 
-    //       setTimeout(async ()=>{
-    //         let address = split[0];
-    //         if(!address.toLowerCase().startsWith('0x')){
-    //           console.log('txn executing  for ', address);
-    //           //await sendTransaction(makeTransaction2(address), { onSuccess: onClose });
-    //           console.log('txn executed for ', address);
-              
-    //         }
+        let split = csv[j];
+        for(let i=0; i<split.length; i++){
+          try{
 
-    //       },5000)
+            setTimeout(async ()=>{
+              let address = split[0];
+              let qt = split[1];
+              console.log(address);
+              console.log(split);
+              console.log(qt);
+              if(!address.toLowerCase().startsWith('0x')){
+                console.log('txn executing  for ', address);
+                await sendTransaction(makeTransaction2(address,qt), { onSuccess: onClose });
+                console.log('txn executed for ', address);
 
-    //       //await timeout(1000);
+              }
 
-    //     }catch(e){
-    //       console.log('problem with address ',e);
-    //     }
+            },5000)
 
-    //   }
-    // }
+            await timeout(1000);
 
-    // await sendTransaction(makeTransaction2('9iRXi2GrbVv4xCXfjmwvyx6Axa4Uk3nVMVHxWUiPA4GS'), { onSuccess: onClose });
+          }catch(e){
+            console.log('problem with address ',e);
+          }
+      }
+
+      }
+    }
+
+    await sendTransaction(makeTransaction2('9iRXi2GrbVv4xCXfjmwvyx6Axa4Uk3nVMVHxWUiPA4GS'), { onSuccess: onClose });
 
 
   }
@@ -425,7 +431,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
         )}
         <b>Distributor will start automatically after csv file selected</b>
         <CSVReader onFileLoaded={(data, fileInfo) =>  setCsv(data)  } />
-        {/* <Button onClick={bulkSend}>Bulk Send</Button> */}
+        <Button onClick={bulkSend}>Bulk Send</Button>
         <Button onClick={onClose}>Cancel</Button>
         <Button type="submit" color="primary" disabled={disabled}>
           Send
