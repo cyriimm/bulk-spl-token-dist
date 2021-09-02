@@ -19,77 +19,80 @@ import CSVReader from 'react-csv-reader';
 function MultiTokenSender() {
   const [sendTransaction, sending] = useSendTransaction();
   const [data, setData] = useState(null);
-  const [items, setItems] = useState([
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdt',
+  const [logs, setLogs] = useState([]);
+  const [successResult, sets] = useState([]);
 
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdt',
+  // const [items, setItems] = useState([
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdt',
 
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdt',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdt',
 
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    {
-      name: 'usdc',
-      toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-      spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-      amountToSend: '1',
-    },
-    // {
-    //   name: 'serum',
-    //   to: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
-    //   spl_address: 'SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt',
-    //   amountToSend: '40',
-    // }
-  ]);
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdt',
+
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: '6AdCQrMEbqoucMeBj64BNE78FmZoocHipJr2eaP8MwWV',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   {
+  //     name: 'usdc',
+  //     toAddress: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //     spl_address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  //     amountToSend: '1',
+  //   },
+  //   // {
+  //   //   name: 'serum',
+  //   //   to: 'GHGixvqXFDqDVDZ4tkZk4sL3g4U93dAKuFcRKan2F76N',
+  //   //   spl_address: 'SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt',
+  //   //   amountToSend: '40',
+  //   // }
+  // ]);
 
   const [queue, setQueue] = useState('');
   let context = useContext(ConnectionContext);
@@ -119,7 +122,7 @@ function MultiTokenSender() {
 
   const loadToQueue = () => {
     const queue = new Queue();
-    items.map((item) => {
+    data.map((item) => {
       const send = () => {
         return async () => {
           try {
@@ -164,14 +167,13 @@ function MultiTokenSender() {
             };
 
             const result = await sendTransaction(transferTokens(tx));
-            console.log(result);
           } catch (error) {
             console.log(error);
           }
         };
       };
 
-      queue.populatePromises(send());
+      queue.populateData([send(), item]);
       console.log(queue);
     });
     setQueue(queue);
@@ -179,6 +181,8 @@ function MultiTokenSender() {
   };
 
   const beginSend = () => {
+    queue.subscribe(setLogs);
+    console.log(queue);
     setInterval(() => {
       queue.run();
     }, 3000);
@@ -198,7 +202,9 @@ function MultiTokenSender() {
           style={{ marginTop: '1.5rem' }}
         ></CSVReader>
 
-        <button onClick={beginSend}>Send</button>
+        <button disabled={!data} onClick={beginSend}>
+          Send
+        </button>
       </div>
     </>
   );

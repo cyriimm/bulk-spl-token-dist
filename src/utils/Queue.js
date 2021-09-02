@@ -1,31 +1,43 @@
 class Queue {
-  promises = [];
+  data = [];
 
   running = false;
 
-  populatePromises = (promise) => {
-    this.promises.push(promise);
+  error = [];
+
+  subscribe = (listener) => {
+    this.listener = listener;
   };
 
-  depopulatePromises = (promsise) => {
-    this.promises.shift();
+  populateData = (data) => {
+    this.data.push(data);
+  };
+
+  depopulateData = () => {
+    this.data.shift();
   };
 
   run = async () => {
     if (this.running === true) return;
-    if (this.promises.length === 0) return;
+    if (this.data.length === 0) return;
 
     try {
       this.running = true;
-      console.log('starting');
-      await this.promises[0]();
 
-      this.promises.shift();
-      console.log('ending');
+      await this.data[0][0]();
+
+      const data = this.data.shift();
+      this.listener((prev) => {
+        return [...prev, data[1], 'success'];
+      });
       this.running = false;
     } catch (err) {
       console.log(err);
-      this.promises.shift();
+      const data = this.data.shift();
+      this.listener((prev) => {
+        return [...prev, data[1], 'failed'];
+      });
+
       this.running = false;
     }
   };

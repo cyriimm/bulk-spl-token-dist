@@ -275,7 +275,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     );
   }
 
-  console.log(balanceInfo);
   async function makeTransaction() {
     let amount = Math.round(parseFloat(transferAmountString) * 10 ** decimals);
     if (!amount || amount <= 0) {
