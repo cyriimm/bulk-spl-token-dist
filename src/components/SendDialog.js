@@ -8,7 +8,7 @@ import DialogForm from './DialogForm';
 import {
   useWallet,
   useWalletAddressForMint,
-  useWalletPublicKeys,
+  useWalletPublicKeys, useWalletPublicKeysMints,
   useWalletPublicKeysSymbol,
   useWalletTokenAccounts
 } from '../utils/wallet';
@@ -203,6 +203,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   const [sendTransaction, sending] = useSendTransaction();
   const [walletAccounts] = useWalletTokenAccounts();
   const [kz,loaded1] = useWalletPublicKeysSymbol();
+  const [mints,loaded2] = useWalletPublicKeysMints();
   const [keys, loaded] = useWalletPublicKeys();
   const [csv, setCsv] = useState([]);
   const [splitCsv, setSplitCsv] = useState([]);
@@ -270,7 +271,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [setOverrideDestinationCheck]);
 
 
-  async function makeTransaction2(address,qt,key) {
+  async function makeTransaction2(address,qt,key,mint) {
     let amount = Math.round(parseFloat(qt) * 10 ** decimals);
     console.log(amount);
     if (!amount || amount <= 0) {
@@ -284,7 +285,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
         key,
         new PublicKey(address),
         amount,
-        balanceInfo.mint,
+        mint,
         decimals,
         null,
         overrideDestinationCheck,
@@ -320,11 +321,20 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
       try {
         setTimeout(async () => {
           const [address,amount,coin] = line;
+          console.log("lists");
+          console.log(kz);
+          console.log(mints)
           let key = kz[coin];
+          let mint = mints[coin];
+          console.log("key")
+          console.log(key)
+          console.log(key.toBase58())
+          console.log("mint")
+          console.log(mint)
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,key,coin);
+            await sendTransactionAuto(address,amount,key,coin,mint);
             console.log('txn executed for ', address);
           }
         }, 2000)
@@ -340,9 +350,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [csv]);
 
 
-  async function sendTransactionAuto(address,qt,key,coin){
+  async function sendTransactionAuto(address,qt,key,coin,mint){
 
-    return await sendTransaction(makeTransaction2(address,qt,key), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
+    return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
 
   }
 
