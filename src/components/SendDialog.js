@@ -271,14 +271,14 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [setOverrideDestinationCheck]);
 
 
-  async function makeTransaction2(address,qt,key,mint) {
+  async function makeTransaction2(address,qt,acc_address,mint) {
     let amount = Math.round(parseFloat(qt) * 10 ** decimals);
     console.log(amount);
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
     }
     return wallet.transferToken(
-        publicKey,
+        new PublicKey(acc_address),
         new PublicKey(address),
         amount,
         new PublicKey(mint),
@@ -316,14 +316,14 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     csv.map(line => {
       try {
         setTimeout(async () => {
-          const [address,amount,coin] = line;
+          const [address,amount,acc_address,mint] = line;
           console.log("lists");
           console.log(kz);
           console.log(mints)
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,coin,mint);
+            await sendTransactionAuto(address,amount,acc_address,mint);
             console.log('txn executed for ', address);
           }
         }, 2000)
@@ -339,9 +339,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [csv]);
 
 
-  async function sendTransactionAuto(address,qt,key,coin,mint){
+  async function sendTransactionAuto(address,amount,acc_address,mint){
 
-    return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
+    return await sendTransaction(makeTransaction2(address,amount,acc_address,mint), { onSuccess: onClose }, address+' - '+qt +" " +acc_address+ '\n');
 
   }
 
