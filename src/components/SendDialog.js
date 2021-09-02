@@ -281,11 +281,14 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     console.log(publicKey.address);
     console.log(publicKey);
     console.log(publicKey.toBase58());
+    if (key == null){
+      key = publicKey;
+    }
     return wallet.transferToken(
         key,
         new PublicKey(address),
         amount,
-        mint,
+        new PublicKey(mint),
         decimals,
         null,
         overrideDestinationCheck,
@@ -326,11 +329,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           console.log(mints)
           let key = kz[coin];
           let mint = mints[coin];
-          console.log("key")
-          console.log(key)
-          console.log(key.toBase58())
-          console.log("mint")
-          console.log(mint)
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
