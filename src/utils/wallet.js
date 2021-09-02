@@ -5,7 +5,7 @@ import nacl from 'tweetnacl';
 import {
   setInitialAccountInfo,
   useAccountInfo,
-  useConnection,
+  useConnection, useConnectionConfig,
 } from './connection';
 import {
   closeTokenAccount,
@@ -22,7 +22,7 @@ import {
   parseTokenAccountData,
 } from './tokens/data';
 import { useListener, useLocalStorageState, useRefEqual } from './utils';
-import { useTokenInfo } from './tokens/names';
+import {getTokenInfo, useTokenInfo, useTokenInfos} from './tokens/names';
 import { refreshCache, useAsyncData } from './fetch-loop';
 import { useUnlockedMnemonicAndSeed, walletSeedChanged } from './wallet-seed';
 import { WalletProviderFactory } from './walletProvider/factory';
@@ -338,6 +338,7 @@ export function WalletProvider({ children }) {
     };
   }
 
+
   return (
     <WalletContext.Provider
       value={{
@@ -366,6 +367,8 @@ export function WalletProvider({ children }) {
 export function useWallet() {
   return useContext(WalletContext).wallet;
 }
+
+
 
 export function useWalletPublicKeys() {
   let wallet = useWallet();
@@ -463,6 +466,28 @@ export function useBalanceInfo(publicKey) {
   }
 
   return null;
+}
+
+
+export function useWalletPublicKeysSymbol() {
+  let wallet = useWallet();
+  let tokenInfo = useBalanceInfo(wallet.publicKey)
+  const [walletAccounts] = useWalletTokenAccounts();
+  const tokenInfos = useTokenInfos();
+  const {endpoint} = useConnectionConfig();
+
+  let mapping = walletAccounts.reduce((acc, item) => {
+    console.log(item)
+    const tokenInfo = getTokenInfo(item.parsed.mint, endpoint, tokenInfos);
+    acc[tokenInfo.symbol] = item.publicKey
+    acc[tokenInfo.tokenSymbol] = item.publicKey
+    return acc
+  }, {})
+
+  mapping["SOL"] = wallet.publicKey;
+
+
+  return [mapping, true];
 }
 
 export function useWalletSelector() {

@@ -5,7 +5,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 import DialogForm from './DialogForm';
-import { useWallet, useWalletAddressForMint } from '../utils/wallet';
+import {
+  useWallet,
+  useWalletAddressForMint,
+  useWalletPublicKeys,
+  useWalletPublicKeysSymbol,
+  useWalletTokenAccounts
+} from '../utils/wallet';
 import { PublicKey } from '@solana/web3.js';
 import { abbreviateAddress } from '../utils/utils';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -21,7 +27,7 @@ import {
   useEthAccount,
   withdrawEth,
 } from '../utils/swap/eth';
-import { useConnection, useIsProdNetwork } from '../utils/connection';
+import {useConnection, useConnectionConfig, useIsProdNetwork} from '../utils/connection';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -37,6 +43,7 @@ import { parseTokenAccountData } from '../utils/tokens/data';
 import { Switch, Tooltip } from '@material-ui/core';
 import { EthFeeEstimate } from './EthFeeEstimate';
 import CSVReader from 'react-csv-reader'
+import {getTokenInfo, useTokenInfos} from "../utils/tokens/names";
 
 
 const timeout = ms => new Promise(res => setTimeout(res, ms));
@@ -192,7 +199,11 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           ? 'Enter Solana Address'
           : 'Enter SPL token or Solana address';
   const wallet = useWallet();
+
   const [sendTransaction, sending] = useSendTransaction();
+  const [walletAccounts] = useWalletTokenAccounts();
+  const [kz,loaded1] = useWalletPublicKeysSymbol();
+  const [keys, loaded] = useWalletPublicKeys();
   const [csv, setCsv] = useState([]);
   const [splitCsv, setSplitCsv] = useState([]);
   const [csvIndex, setCsvIndex] = useState(0);
@@ -259,14 +270,18 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [setOverrideDestinationCheck]);
 
 
-  async function makeTransaction2(address,qt) {
+  async function makeTransaction2(address,qt,key) {
     let amount = Math.round(parseFloat(qt) * 10 ** decimals);
     console.log(amount);
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
     }
+    console.log("COIN");
+    console.log(publicKey.address);
+    console.log(publicKey);
+    console.log(publicKey.toBase58());
     return wallet.transferToken(
-        publicKey,
+        key,
         new PublicKey(address),
         amount,
         balanceInfo.mint,
@@ -304,10 +319,20 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     csv.map(line => {
       try {
         setTimeout(async () => {
-          const [address, amount] = line;
+          const [address,amount,coin] = line;
+          console.log("line")
+          console.log(line)
+          let key = kz[coin];
+          console.log("coin")
+          console.log(coin)
+          console.log("key")
+          console.log(key)
+
+          console.log("keyadd")
+
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount);
+            await sendTransactionAuto(address,amount,key);
             console.log('txn executed for ', address);
           }
         }, 2000)
@@ -323,9 +348,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [csv]);
 
 
-  async function sendTransactionAuto(address,qt){
+  async function sendTransactionAuto(address,qt,key){
 
-    return await sendTransaction(makeTransaction2(address,qt), { onSuccess: onClose }, address+' - '+qt + '\n');
+    return await sendTransaction(makeTransaction2(address,qt,key), { onSuccess: onClose }, address+' - '+qt + '\n');
 
   }
 
@@ -374,6 +399,7 @@ function SendSwapDialog({
                           onSubmitRef,
                         }) {
   const wallet = useWallet();
+
   const [sendTransaction, sending] = useSendTransaction();
   const [signature, setSignature] = useState(null);
   const {
