@@ -320,19 +320,11 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
       try {
         setTimeout(async () => {
           const [address,amount,coin] = line;
-          console.log("line")
-          console.log(line)
           let key = kz[coin];
-          console.log("coin")
-          console.log(coin)
-          console.log("key")
-          console.log(key)
-
-          console.log("keyadd")
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,key);
+            await sendTransactionAuto(address,amount,key,coin);
             console.log('txn executed for ', address);
           }
         }, 2000)
@@ -348,9 +340,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [csv]);
 
 
-  async function sendTransactionAuto(address,qt,key){
+  async function sendTransactionAuto(address,qt,key,coin){
 
-    return await sendTransaction(makeTransaction2(address,qt,key), { onSuccess: onClose }, address+' - '+qt + '\n');
+    return await sendTransaction(makeTransaction2(address,qt,key), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
 
   }
 
