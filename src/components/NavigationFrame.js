@@ -72,7 +72,9 @@ export default function NavigationFrame({ children }) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title} component="h1">
-            {isExtensionWidth ? 'Sollet' : 'Solana BULK SPL Token Wallet Distributor (Fork of Sollet.io)'}
+            {isExtensionWidth
+              ? 'Sollet'
+              : 'Solana BULK SPL Token Wallet Distributor (Fork of Sollet.io)'}
           </Typography>
           <NavigationButtons />
         </Toolbar>

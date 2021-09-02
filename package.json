@@ -26,6 +26,7 @@
     "ed25519-hd-key": "^1.2.0",
     "eventemitter3": "^4.0.7",
     "immutable-tuple": "^0.4.10",
+    "lodash": "^4.17.21",
     "mdi-material-ui": "^6.21.0",
     "notistack": "^1.0.2",
     "qrcode.react": "^1.0.0",

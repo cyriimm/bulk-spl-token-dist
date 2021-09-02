@@ -11,7 +11,7 @@ import assert from 'assert';
 import { useLocalStorageState, useRefEqual } from './utils';
 import { refreshCache, setCache, useAsyncData } from './fetch-loop';
 
-const ConnectionContext = React.createContext<{
+export const ConnectionContext = React.createContext<{
   endpoint: string;
   setEndpoint: (string) => void;
   connection: Connection;
@@ -85,6 +85,7 @@ export function useAccountInfo(publicKey?: PublicKey) {
       return;
     }
     let previousInfo: AccountInfo<Buffer> | null = null;
+
     const id = connection.onAccountChange(publicKey, (info) => {
       if (
         !previousInfo ||

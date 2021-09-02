@@ -447,6 +447,7 @@ async function createAndTransferToAccount({
       memo,
     },
   );
+
   transaction.add(transferBetweenAccountsTxn);
   let signers = [];
   return await signAndSendTransaction(connection, transaction, owner, signers);

@@ -34,15 +34,14 @@ export default function WalletPage() {
         <Grid item xs={12} className={classes.balancesContainer}>
           <BalancesList />
         </Grid>
-      
-          <Grid item xs={12}>
-            <DebugButtons />
-          </Grid>
 
-          <Grid item xs={12}>
-            <ErrorLogViewer />
-          </Grid>
-     
+        <Grid item xs={12}>
+          <DebugButtons />
+        </Grid>
+
+        <Grid item xs={12}>
+          <ErrorLogViewer />
+        </Grid>
       </Grid>
     </Container>
   );

@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useContext,
+} from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -10,7 +16,11 @@ import {
   useWalletPublicKeys,
   useWalletSelector,
 } from '../utils/wallet';
-import { findAssociatedTokenAddress } from '../utils/tokens';
+import {
+  findAssociatedTokenAddress,
+  transferBetweenSplTokenAccounts,
+  transferTokens,
+} from '../utils/tokens';
 import LoadingIndicator from './LoadingIndicator';
 import Collapse from '@material-ui/core/Collapse';
 import { Typography } from '@material-ui/core';
@@ -42,18 +52,22 @@ import {
   useIsProdNetwork,
   refreshAccountInfo,
   useSolanaExplorerUrlSuffix,
+  useConnectionConfig,
+  ConnectionContext,
 } from '../utils/connection';
 import { serumMarkets, priceStore } from '../utils/markets';
 import { swapApiRequest } from '../utils/swap/api';
 import { showSwapAddress } from '../utils/config';
 import { useAsyncData } from '../utils/fetch-loop';
 import { showTokenInfoDialog } from '../utils/config';
-import { useConnection } from '../utils/connection';
+
 import CloseTokenAccountDialog from './CloseTokenAccountButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import TokenIcon from './TokenIcon';
 import EditAccountNameDialog from './EditAccountNameDialog';
 import MergeAccountsDialog from './MergeAccountsDialog';
+import { useConnection } from '../utils/connection';
+import MultiTokenSender from './MultiTokenSender';
 
 const balanceFormat = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 4,
@@ -288,6 +302,7 @@ export default function BalancesList() {
         open={showMergeAccounts}
         onClose={() => setShowMergeAccounts(false)}
       />
+      <MultiTokenSender />
     </Paper>
   );
 }
@@ -665,7 +680,9 @@ function BalanceListItemDetails({
           >
             Send
           </Button>
-          {localStorage.getItem('warning-close-account') && mint && amount === 0 ? (
+          {localStorage.getItem('warning-close-account') &&
+          mint &&
+          amount === 0 ? (
             <Button
               variant="outlined"
               color="secondary"
@@ -676,7 +693,6 @@ function BalanceListItemDetails({
               Delete
             </Button>
           ) : null}
-
         </div>
         {additionalInfo}
       </div>

@@ -1,0 +1,200 @@
+{
+  "coverage": "89.76%",
+  "expectCount": 381,
+  "actualCount": 342,
+  "files": {
+    "src/account.js": {
+      "expectCount": 5,
+      "actualCount": 5,
+      "undocumentLines": []
+    },
+    "src/agent-manager.js": {
+      "expectCount": 10,
+      "actualCount": 7,
+      "undocumentLines": [
+        6,
+        8,
+        10
+      ]
+    },
+    "src/bpf-loader-deprecated.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        5
+      ]
+    },
+    "src/bpf-loader.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        8
+      ]
+    },
+    "src/connection.js": {
+      "expectCount": 164,
+      "actualCount": 157,
+      "undocumentLines": [
+        26,
+        262,
+        290,
+        318,
+        336,
+        367,
+        1379
+      ]
+    },
+    "src/fee-calculator.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/index.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/instruction.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/layout.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/loader.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/message.js": {
+      "expectCount": 10,
+      "actualCount": 9,
+      "undocumentLines": [
+        57
+      ]
+    },
+    "src/nonce-account.js": {
+      "expectCount": 7,
+      "actualCount": 6,
+      "undocumentLines": [
+        24
+      ]
+    },
+    "src/publickey.js": {
+      "expectCount": 16,
+      "actualCount": 12,
+      "undocumentLines": [
+        9,
+        153,
+        197,
+        198
+      ]
+    },
+    "src/secp256k1-program.js": {
+      "expectCount": 11,
+      "actualCount": 4,
+      "undocumentLines": [
+        12,
+        14,
+        15,
+        16,
+        17,
+        45,
+        59
+      ]
+    },
+    "src/stake-program.js": {
+      "expectCount": 35,
+      "actualCount": 32,
+      "undocumentLines": [
+        16,
+        20,
+        33
+      ]
+    },
+    "src/system-program.js": {
+      "expectCount": 29,
+      "actualCount": 29,
+      "undocumentLines": []
+    },
+    "src/sysvar.js": {
+      "expectCount": 6,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        8,
+        12,
+        16,
+        20,
+        24
+      ]
+    },
+    "src/timing.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/transaction.js": {
+      "expectCount": 35,
+      "actualCount": 34,
+      "undocumentLines": [
+        35
+      ]
+    },
+    "src/util/cluster.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/util/promise-timeout.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/util/send-and-confirm-raw-transaction.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/util/send-and-confirm-transaction.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/util/shortvec-encoding.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/util/sleep.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/util/to-buffer.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        3
+      ]
+    },
+    "src/validator-info.js": {
+      "expectCount": 7,
+      "actualCount": 5,
+      "undocumentLines": [
+        9,
+        37
+      ]
+    },
+    "src/vote-account.js": {
+      "expectCount": 14,
+      "actualCount": 13,
+      "undocumentLines": [
+        8
+      ]
+    }
+  }
+}

@@ -36,11 +36,9 @@ import {
 import { parseTokenAccountData } from '../utils/tokens/data';
 import { Switch, Tooltip } from '@material-ui/core';
 import { EthFeeEstimate } from './EthFeeEstimate';
-import CSVReader from 'react-csv-reader'
+import CSVReader from 'react-csv-reader';
 
-
-const timeout = ms => new Promise(res => setTimeout(res, ms));
-
+const timeout = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const WUSDC_MINT = new PublicKey(
   'BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW',
@@ -81,7 +79,10 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
         <Tab label="SPL USDT" key="wusdtToSplUsdt" value="wusdtToSplUsdt" />,
         <Tab label="ERC20 USDT" key="swap" value="swap" />,
       ];
-    } else if (localStorage.getItem('sollet-private') && mint?.equals(USDC_MINT)) {
+    } else if (
+      localStorage.getItem('sollet-private') &&
+      mint?.equals(USDC_MINT)
+    ) {
       return [
         <Tab label="SPL USDC" key="spl" value="spl" />,
         <Tab label="SPL WUSDC" key="usdcToSplWUsdc" value="usdcToSplWUsdc" />,
@@ -110,8 +111,8 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
         fullWidth
       >
         <DialogTitle>
-          Send {tokenName }
-          {tokenSymbol }
+          Send {tokenName}
+          {tokenSymbol}
           {ethAccount && (
             <div>
               <Typography color="textSecondary" style={{ fontSize: '14px' }}>
@@ -181,7 +182,6 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
           />
         )}
       </DialogForm>
-
     </>
   );
 }
@@ -258,7 +258,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     };
   }, [setOverrideDestinationCheck]);
 
-
   async function makeTransaction2(address) {
     let amount = Math.round(parseFloat(transferAmountString) * 10 ** decimals);
     console.log(amount);
@@ -276,6 +275,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     );
   }
 
+  console.log(balanceInfo);
   async function makeTransaction() {
     let amount = Math.round(parseFloat(transferAmountString) * 10 ** decimals);
     if (!amount || amount <= 0) {
@@ -300,72 +300,59 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     return sendTransaction(makeTransaction(), { onSuccess: onClose });
   }
 
-  async function bulkSend(){
-
-
+  async function bulkSend() {
     // if(csv!=null){
-
     //   let split = csv[0];
     //   console.log(split);
-
     //   for(let i=0; i<split.length; i++){
     //     try{
-
     //       setTimeout(async ()=>{
     //         let address = split[0];
     //         if(!address.toLowerCase().startsWith('0x')){
     //           console.log('txn executing  for ', address);
     //           //await sendTransaction(makeTransaction2(address), { onSuccess: onClose });
     //           console.log('txn executed for ', address);
-              
     //         }
-
     //       },5000)
-
     //       //await timeout(1000);
-
     //     }catch(e){
     //       console.log('problem with address ',e);
     //     }
-
     //   }
     // }
-
     // await sendTransaction(makeTransaction2('9iRXi2GrbVv4xCXfjmwvyx6Axa4Uk3nVMVHxWUiPA4GS'), { onSuccess: onClose });
-
-
   }
 
-  async function sendTransactionAuto(address){
-
-    return await sendTransaction(makeTransaction2(address), { onSuccess: onClose }, address);
-
+  async function sendTransactionAuto(address) {
+    return await sendTransaction(
+      makeTransaction2(address),
+      { onSuccess: onClose },
+      address,
+    );
   }
-  
 
   useEffect(async () => {
-    let index=0; 
-    if(csv!=null && csv[0] && csv[0].length>0){
+    let index = 0;
+    if (csv != null && csv[0] && csv[0].length > 0) {
       let csvArray = csv[0];
-      setInterval(()=>{
-        try{
-
-        
-        if(index < csvArray.length){
-          let address= csvArray[index];
-          console.log('sending to', address, index);
-          let status = sendTransactionAuto(address);
-          console.log('sent', address, index, status);
-          index++;
-
-        }else{}
-      }catch(e){
-        console.log('error sending transaction ',e, csvArray[index] )
-      }
-
-
-      },5000, csvIndex)
-
+      setInterval(
+        () => {
+          try {
+            if (index < csvArray.length) {
+              let address = csvArray[index];
+              console.log('sending to', address, index);
+              let status = sendTransactionAuto(address);
+              console.log('sent', address, index, status);
+              index++;
+            } else {
+            }
+          } catch (e) {
+            console.log('error sending transaction ', e, csvArray[index]);
+          }
+        },
+        5000,
+        csvIndex,
+      );
     }
 
     // if(csv!=null){
@@ -374,7 +361,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     //   console.log(split);
     //   if(split!=null){
 
-      
     //   for(let i=0; i<split.length; i++){
     //     try{
 
@@ -384,7 +370,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     //           console.log('txn executing  for ', address);
     //           //await sendTransaction(makeTransaction2(address), { onSuccess: onClose });
     //           console.log('txn executed for ', address);
-              
+
     //         }
 
     //       },5000)
@@ -398,9 +384,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     //   }
     // }
     // }
-}, [csv.length]);
-
-
+  }, [csv.length]);
 
   onSubmitRef.current = onSubmit;
   return (
@@ -424,7 +408,7 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           </div>
         )}
         <b>Distributor will start automatically after csv file selected</b>
-        <CSVReader onFileLoaded={(data, fileInfo) =>  setCsv(data)  } />
+        <CSVReader onFileLoaded={(data, fileInfo) => setCsv(data)} />
         {/* <Button onClick={bulkSend}>Bulk Send</Button> */}
         <Button onClick={onClose}>Cancel</Button>
         <Button type="submit" color="primary" disabled={disabled}>

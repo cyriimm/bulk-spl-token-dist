@@ -1,0 +1,37 @@
+{
+  "name": "esdoc-inject-style-plugin",
+  "version": "1.0.0",
+  "description": "A inject style plugin for ESDoc",
+  "author": "h13i32maru",
+  "homepage": "https://github.com/esdoc/esdoc-plugins",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esdoc/esdoc-plugins"
+  },
+  "dependencies": {
+    "cheerio": "0.22.0",
+    "fs-extra": "1.0.0"
+  },
+  "devDependencies": {
+    "esdoc": "latest",
+    "mocha": "2.5.3"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "scripts": {
+    "test": "rm -rf ./test/out && mocha --require ./test/init.js $(find test/ -regex '.*.test.js$') -R spec"
+  },
+  "keywords": [
+    "esdoc",
+    "inject",
+    "style",
+    "plugin"
+  ],
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "main": "src/Plugin.js"
+}
