@@ -28,6 +28,7 @@
     "immutable-tuple": "^0.4.10",
     "mdi-material-ui": "^6.21.0",
     "notistack": "^1.0.2",
+    "prompt-sync": "^4.2.0",
     "qrcode.react": "^1.0.0",
     "react": "^17.0.1",
     "react-csv-reader": "^3.3.0",
