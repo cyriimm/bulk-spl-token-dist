@@ -277,12 +277,8 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
     }
-    console.log("COIN");
-    console.log(publicKey.address);
-    console.log(publicKey);
-    console.log(publicKey.toBase58());
     return wallet.transferToken(
-        key,
+        publicKey,
         new PublicKey(address),
         amount,
         mint,
@@ -320,23 +316,23 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     csv.map(line => {
       try {
         setTimeout(async () => {
-          const [address,amount,coin] = line;
-          console.log("lists");
-          console.log(kz);
-          console.log(mints)
-          let key = kz[coin];
-          let mint = mints[coin];
-          console.log("key")
-          console.log(key)
-          console.log(key.toBase58())
-          console.log("mint")
-          console.log(mint)
+          const [address,amount,tkn_address] = line;
+          for (let i=0; i<mints.length;i++) {
+            if (tkn_address === mints[i].parsed.mint.toBase58()){
 
-          if (!address.toLowerCase().startsWith('0x')) {
-            console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,key,coin,mint);
-            console.log('txn executed for ', address);
+              console.log(i)
+              console.log(mints[i].parsed.owner.toBase58())
+              console.log(mints[i].publicKey.toBase58())
+              console.log(mints[i].parsed.mint)
+
+              if (!address.toLowerCase().startsWith('0x')) {
+                console.log('txn executing  for ', address);
+                await sendTransactionAuto(address,amount,mints[i].publicKey,mints[i].parsed.mint);
+                console.log('txn executed for ', address);
+              }
+            }
           }
+
         }, 2000)
       } catch (e) {
         console.log('problem with address ', e);
@@ -350,10 +346,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }, [csv]);
 
 
-  async function sendTransactionAuto(address,qt,key,coin,mint){
+  async function sendTransactionAuto(address,qt,key,mint){
 
-    return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
-
+    return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" "+ '\n');
   }
 
 
