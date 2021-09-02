@@ -277,15 +277,8 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
     }
-    console.log("COIN");
-    console.log(publicKey.address);
-    console.log(publicKey);
-    console.log(publicKey.toBase58());
-    if (key == null){
-      key = publicKey;
-    }
     return wallet.transferToken(
-        key,
+        publicKey,
         new PublicKey(address),
         amount,
         new PublicKey(mint),
@@ -327,12 +320,10 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           console.log("lists");
           console.log(kz);
           console.log(mints)
-          let key = kz[coin];
-          let mint = mints[coin];
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,key,coin,mint);
+            await sendTransactionAuto(address,amount,coin,mint);
             console.log('txn executed for ', address);
           }
         }, 2000)
