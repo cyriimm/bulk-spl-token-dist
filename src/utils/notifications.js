@@ -14,7 +14,8 @@ export function useSendTransaction() {
   async function sendTransaction(
     signaturePromise,
     { onSuccess, onError } = {},
-    publicSendAddress = ''
+    publicSendAddress = '',
+    amount = ''
   ) {
     let id = enqueueSnackbar('Sending transaction...', {
       variant: 'info',

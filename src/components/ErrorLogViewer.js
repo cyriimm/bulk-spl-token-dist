@@ -18,12 +18,12 @@ export default function ErrorLogViewer(){
         EventEmitter.subscribe('ERROR_ADDRESS', errorAddress => {
 
             console.log('ERROR ADDRESS', errorAddress);
-            if(errorAddress!=null && errorAddress!=''){
-        
+            if(errorAddress!=null && errorAddress!==''){
+
                 setErrorAddressString((prevState) =>{
                     let addressStr =prevState;
-                    addressStr += errorAddress +',';
-                    return addressStr;
+                    addressStr += errorAddress;
+                    return addressStr += "\n";
                 });
               
                 setTotalErrors((prevState)=> {
@@ -105,6 +105,7 @@ export default function ErrorLogViewer(){
                 Unsuccessful Airdrops:  {totalErrors} */}
 
             <Paper  style={{ width: "100%"}}  >
+                Last Successful Airdrop Address:  {lastOkAddress}
                 Last Successful Airdrop Address:  {lastOkAddress}
                 <p></p>
                 Successfully Completed Airdrops:  {totalSuccess}
