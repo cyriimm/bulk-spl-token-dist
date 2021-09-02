@@ -36,19 +36,17 @@ import {
 import { parseTokenAccountData } from '../utils/tokens/data';
 import { Switch, Tooltip } from '@material-ui/core';
 import { EthFeeEstimate } from './EthFeeEstimate';
-import CSVReader from 'react-csv-reader'
+import CSVReader from 'react-csv-reader';
 
-
-const timeout = ms => new Promise(res => setTimeout(res, ms));
-
+const timeout = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const WUSDC_MINT = new PublicKey(
-    'BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW',
+  'BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW',
 );
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
 
 const WUSDT_MINT = new PublicKey(
-    'BQcdHdAQW1hczDbBi9hiegXAR7A98Q9jx3X3iBBBDiq4',
+  'BQcdHdAQW1hczDbBi9hiegXAR7A98Q9jx3X3iBBBDiq4',
 );
 
 const USDT_MINT = new PublicKey('Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB');
@@ -60,9 +58,9 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
   const onSubmitRef = useRef();
 
   const [swapCoinInfo] = useSwapApiGet(
-      showSwapAddress && balanceInfo.mint && isProdNetwork
-          ? `coins/sol/${balanceInfo.mint.toBase58()}`
-          : null,
+    showSwapAddress && balanceInfo.mint && isProdNetwork
+      ? `coins/sol/${balanceInfo.mint.toBase58()}`
+      : null,
   );
   const ethAccount = useEthAccount();
 
@@ -81,7 +79,10 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
         <Tab label="SPL USDT" key="wusdtToSplUsdt" value="wusdtToSplUsdt" />,
         <Tab label="ERC20 USDT" key="swap" value="swap" />,
       ];
-    } else if (localStorage.getItem('sollet-private') && mint?.equals(USDC_MINT)) {
+    } else if (
+      localStorage.getItem('sollet-private') &&
+      mint?.equals(USDC_MINT)
+    ) {
       return [
         <Tab label="SPL USDC" key="spl" value="spl" />,
         <Tab label="SPL WUSDC" key="usdcToSplWUsdc" value="usdcToSplWUsdc" />,
@@ -91,117 +92,116 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
       return [
         <Tab label={`SPL ${swapCoinInfo.ticker}`} key="spl" value="spl" />,
         <Tab
-            label={`${swapCoinInfo.erc20Contract ? 'ERC20' : 'Native'} ${
-                swapCoinInfo.ticker
-            }`}
-            key="swap"
-            value="swap"
+          label={`${swapCoinInfo.erc20Contract ? 'ERC20' : 'Native'} ${
+            swapCoinInfo.ticker
+          }`}
+          key="swap"
+          value="swap"
         />,
       ];
     }
   };
 
   return (
-      <>
-        <DialogForm
-            open={open}
-            onClose={onClose}
-            onSubmit={() => onSubmitRef.current()}
-            fullWidth
-        >
-          <DialogTitle>
-            Send {tokenName }
-            {tokenSymbol }
-            {ethAccount && (
-                <div>
-                  <Typography color="textSecondary" style={{ fontSize: '14px' }}>
-                    Metamask connected: {ethAccount}
-                  </Typography>
-                </div>
-            )}
-          </DialogTitle>
-          {swapCoinInfo ? (
-              <Tabs
-                  value={tab}
-                  variant="fullWidth"
-                  onChange={(e, value) => setTab(value)}
-                  textColor="primary"
-                  indicatorColor="primary"
-              >
-                {getTabs(mint)}
-              </Tabs>
-          ) : null}
-
-          {tab === 'spl' ? (
-              <SendSplDialog
-                  onClose={onClose}
-                  publicKey={publicKey}
-                  balanceInfo={balanceInfo}
-                  onSubmitRef={onSubmitRef}
-              />
-          ) : tab === 'wusdcToSplUsdc' ? (
-              <SendSwapDialog
-                  key={tab}
-                  onClose={onClose}
-                  publicKey={publicKey}
-                  balanceInfo={balanceInfo}
-                  swapCoinInfo={swapCoinInfo}
-                  onSubmitRef={onSubmitRef}
-                  wusdcToSplUsdc
-              />
-          ) : tab === 'wusdtToSplUsdt' ? (
-              <SendSwapDialog
-                  key={tab}
-                  onClose={onClose}
-                  publicKey={publicKey}
-                  balanceInfo={balanceInfo}
-                  swapCoinInfo={swapCoinInfo}
-                  onSubmitRef={onSubmitRef}
-                  wusdtToSplUsdt
-              />
-          ) : tab === 'usdcToSplWUsdc' ? (
-              <SendSwapDialog
-                  key={tab}
-                  onClose={onClose}
-                  publicKey={publicKey}
-                  balanceInfo={balanceInfo}
-                  swapCoinInfo={swapCoinInfo}
-                  onSubmitRef={onSubmitRef}
-                  usdcToSplWUsdc
-              />
-          ) : (
-              <SendSwapDialog
-                  key={tab}
-                  onClose={onClose}
-                  publicKey={publicKey}
-                  balanceInfo={balanceInfo}
-                  swapCoinInfo={swapCoinInfo}
-                  ethAccount={ethAccount}
-                  onSubmitRef={onSubmitRef}
-              />
+    <>
+      <DialogForm
+        open={open}
+        onClose={onClose}
+        onSubmit={() => onSubmitRef.current()}
+        fullWidth
+      >
+        <DialogTitle>
+          Send {tokenName}
+          {tokenSymbol}
+          {ethAccount && (
+            <div>
+              <Typography color="textSecondary" style={{ fontSize: '14px' }}>
+                Metamask connected: {ethAccount}
+              </Typography>
+            </div>
           )}
-        </DialogForm>
+        </DialogTitle>
+        {swapCoinInfo ? (
+          <Tabs
+            value={tab}
+            variant="fullWidth"
+            onChange={(e, value) => setTab(value)}
+            textColor="primary"
+            indicatorColor="primary"
+          >
+            {getTabs(mint)}
+          </Tabs>
+        ) : null}
 
-      </>
+        {tab === 'spl' ? (
+          <SendSplDialog
+            onClose={onClose}
+            publicKey={publicKey}
+            balanceInfo={balanceInfo}
+            onSubmitRef={onSubmitRef}
+          />
+        ) : tab === 'wusdcToSplUsdc' ? (
+          <SendSwapDialog
+            key={tab}
+            onClose={onClose}
+            publicKey={publicKey}
+            balanceInfo={balanceInfo}
+            swapCoinInfo={swapCoinInfo}
+            onSubmitRef={onSubmitRef}
+            wusdcToSplUsdc
+          />
+        ) : tab === 'wusdtToSplUsdt' ? (
+          <SendSwapDialog
+            key={tab}
+            onClose={onClose}
+            publicKey={publicKey}
+            balanceInfo={balanceInfo}
+            swapCoinInfo={swapCoinInfo}
+            onSubmitRef={onSubmitRef}
+            wusdtToSplUsdt
+          />
+        ) : tab === 'usdcToSplWUsdc' ? (
+          <SendSwapDialog
+            key={tab}
+            onClose={onClose}
+            publicKey={publicKey}
+            balanceInfo={balanceInfo}
+            swapCoinInfo={swapCoinInfo}
+            onSubmitRef={onSubmitRef}
+            usdcToSplWUsdc
+          />
+        ) : (
+          <SendSwapDialog
+            key={tab}
+            onClose={onClose}
+            publicKey={publicKey}
+            balanceInfo={balanceInfo}
+            swapCoinInfo={swapCoinInfo}
+            ethAccount={ethAccount}
+            onSubmitRef={onSubmitRef}
+          />
+        )}
+      </DialogForm>
+    </>
   );
 }
 
 function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   const defaultAddressHelperText =
-      !balanceInfo.mint || balanceInfo.mint.equals(WRAPPED_SOL_MINT)
-          ? 'Enter Solana Address'
-          : 'Enter SPL token or Solana address';
+    !balanceInfo.mint || balanceInfo.mint.equals(WRAPPED_SOL_MINT)
+      ? 'Enter Solana Address'
+      : 'Enter SPL token or Solana address';
   const wallet = useWallet();
   const [sendTransaction, sending] = useSendTransaction();
   const [csv, setCsv] = useState([]);
   const [splitCsv, setSplitCsv] = useState([]);
   const [csvIndex, setCsvIndex] = useState(0);
   const [addressHelperText, setAddressHelperText] = useState(
-      defaultAddressHelperText,
+    defaultAddressHelperText,
   );
   const [passValidation, setPassValidation] = useState();
   const [overrideDestinationCheck, setOverrideDestinationCheck] = useState(
-      false,
+    false,
   );
   const [shouldShowOverride, setShouldShowOverride] = useState();
   const {
@@ -223,13 +223,13 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
       }
       try {
         const destinationAccountInfo = await wallet.connection.getAccountInfo(
-            new PublicKey(destinationAddress),
+          new PublicKey(destinationAddress),
         );
         setShouldShowOverride(false);
 
         if (destinationAccountInfo.owner.equals(TOKEN_PROGRAM_ID)) {
           const accountInfo = parseTokenAccountData(
-              destinationAccountInfo.data,
+            destinationAccountInfo.data,
           );
           if (accountInfo.mint.toBase58() === mintString) {
             setPassValidation(true);
@@ -258,121 +258,143 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     };
   }, [setOverrideDestinationCheck]);
 
-
-  async function makeTransaction2(address,qt) {
-    let amount = Math.round(parseFloat(qt) * 10 ** decimals);
-    console.log(amount);
-    if (!amount || amount <= 0) {
-      throw new Error('Invalid amount');
-    }
-    return wallet.transferToken(
-        publicKey,
-        new PublicKey(address),
-        amount,
-        balanceInfo.mint,
-        decimals,
-        null,
-        overrideDestinationCheck,
-    );
-  }
-
   async function makeTransaction() {
     let amount = Math.round(parseFloat(transferAmountString) * 10 ** decimals);
     if (!amount || amount <= 0) {
       throw new Error('Invalid amount');
     }
     return wallet.transferToken(
-        publicKey,
-        new PublicKey(destinationAddress),
-        amount,
-        balanceInfo.mint,
-        decimals,
-        null,
-        overrideDestinationCheck,
+      publicKey,
+      new PublicKey(destinationAddress),
+      amount,
+      balanceInfo.mint,
+      decimals,
+      null,
+      overrideDestinationCheck,
+    );
+  }
+  async function makeTransaction2(address, qt) {
+    let amount = Math.round(parseFloat(qt) * 10 ** decimals);
+    console.log(amount);
+    if (!amount || amount <= 0) {
+      throw new Error('Invalid amount');
+    }
+    return wallet.transferToken(
+      publicKey,
+      new PublicKey(address),
+      amount,
+      balanceInfo.mint,
+      decimals,
+      null,
+      overrideDestinationCheck,
+    );
+  }
+
+  async function makeTransaction3(address, recordAmount, walletAddress) {
+    let amount = Math.round(parseFloat(recordAmount) * 10 ** decimals);
+    // console.log(recordAmount);
+    if (!recordAmount || recordAmount <= 0) {
+      throw new Error('Invalid amount');
+    }
+    return wallet.transferToken(
+      publicKey,
+      new PublicKey(walletAddress),
+      amount,
+      address,
+      decimals,
+      null,
+      overrideDestinationCheck,
     );
   }
 
   const disabled = shouldShowOverride
-      ? !overrideDestinationCheck || sending || !validAmount
-      : sending || !validAmount;
+    ? !overrideDestinationCheck || sending || !validAmount
+    : sending || !validAmount;
 
   async function onSubmit() {
     return sendTransaction(makeTransaction(), { onSuccess: onClose });
   }
 
   async function bulkSend() {
-    csv.map(line => {
-      try {
-        setTimeout(async () => {
-          const [address, amount] = line;
-          if (!address.toLowerCase().startsWith('0x')) {
-            console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount);
-            console.log('txn executed for ', address);
-          }
-        }, 2000)
-      } catch (e) {
-        console.log('problem with address ', e);
+    if (csv != null) {
+      let records = csv;
+      // for loop starts at 1 to skip header
+      for (let i = 1; i < records.length; i++) {
+        let amount = records[i][0];
+        let tokenAddress = records[i][1];
+        let walletAddress = records[i][2];
+        try {
+          setTimeout(async () => {
+            if (!walletAddress.startsWith('0x')) {
+              console.log('txn executing  for ', walletAddress);
+              await sendTransactionAuto(amount, tokenAddress, walletAddress);
+              console.log('txn executed for ', walletAddress);
+            } else {
+              console.log('problem with address', walletAddress);
+            }
+          }, 2000);
+        } catch (e) {
+          console.log('problem with address', e);
+        }
       }
-    })
-
+    }
   }
 
   useEffect(() => {
     bulkSend();
   }, [csv]);
 
-
-  async function sendTransactionAuto(address,qt){
-
-    return await sendTransaction(makeTransaction2(address,qt), { onSuccess: onClose }, address+' - '+qt + '\n');
-
+  async function sendTransactionAuto(address, qt, walletAddress) {
+    return await sendTransaction(
+      makeTransaction3(address, qt, walletAddress),
+      { onSuccess: onClose },
+      address + ' - ' + qt + ' - ' + walletAddress + '\n',
+    );
   }
-
 
   onSubmitRef.current = onSubmit;
   return (
-      <>
-        <DialogContent>{fields}</DialogContent>
-        <DialogActions>
-          {shouldShowOverride && (
-              <div
-                  style={{
-                    'align-items': 'center',
-                    display: 'flex',
-                    'text-align': 'left',
-                  }}
-              >
-                <b>This address has no funds. Are you sure it's correct?</b>
-                <Switch
-                    checked={overrideDestinationCheck}
-                    onChange={(e) => setOverrideDestinationCheck(e.target.checked)}
-                    color="primary"
-                />
-              </div>
-          )}
-          <b>Distributor will start automatically after csv file selected</b>
-          <CSVReader onFileLoaded={(data, fileInfo) =>  setCsv(data)  } />
-          <Button onClick={onClose}>Cancel</Button>
-          <Button type="submit" color="primary" disabled={disabled}>
-            Send
-          </Button>
-        </DialogActions>
-      </>
+    <>
+      <DialogContent>{fields}</DialogContent>
+      <DialogActions>
+        {shouldShowOverride && (
+          <div
+            style={{
+              'align-items': 'center',
+              display: 'flex',
+              'text-align': 'left',
+            }}
+          >
+            <b>This address has no funds. Are you sure it's correct?</b>
+            <Switch
+              checked={overrideDestinationCheck}
+              onChange={(e) => setOverrideDestinationCheck(e.target.checked)}
+              color="primary"
+            />
+          </div>
+        )}
+        <b>Distributor will start automatically after csv file selected</b>
+        <CSVReader onFileLoaded={(data, fileInfo) => setCsv(data)} />
+        <Button onClick={onClose}>Cancel</Button>
+        <Button type="submit" color="primary" disabled={disabled}>
+          Send
+        </Button>
+      </DialogActions>
+    </>
   );
 }
 
 function SendSwapDialog({
-                          onClose,
-                          publicKey,
-                          balanceInfo,
-                          swapCoinInfo,
-                          ethAccount,
-                          wusdcToSplUsdc = false,
-                          wusdtToSplUsdt = false,
-                          usdcToSplWUsdc = false,
-                          onSubmitRef,
-                        }) {
+  onClose,
+  publicKey,
+  balanceInfo,
+  swapCoinInfo,
+  ethAccount,
+  wusdcToSplUsdc = false,
+  wusdtToSplUsdt = false,
+  usdcToSplWUsdc = false,
+  onSubmitRef,
+}) {
   const wallet = useWallet();
   const [sendTransaction, sending] = useSendTransaction();
   const [signature, setSignature] = useState(null);
@@ -386,31 +408,31 @@ function SendSwapDialog({
 
   const { tokenName, decimals, mint } = balanceInfo;
   const blockchain =
-      wusdcToSplUsdc || wusdtToSplUsdt || usdcToSplWUsdc
-          ? 'sol'
-          : swapCoinInfo.blockchain === 'sol'
-              ? 'eth'
-              : swapCoinInfo.blockchain;
+    wusdcToSplUsdc || wusdtToSplUsdt || usdcToSplWUsdc
+      ? 'sol'
+      : swapCoinInfo.blockchain === 'sol'
+      ? 'eth'
+      : swapCoinInfo.blockchain;
   const needMetamask = blockchain === 'eth';
 
   const [ethBalance] = useAsyncData(
-      () => getErc20Balance(ethAccount),
-      'ethBalance',
-      {
-        refreshInterval: 2000,
-      },
+    () => getErc20Balance(ethAccount),
+    'ethBalance',
+    {
+      refreshInterval: 2000,
+    },
   );
   const ethFeeData = useSwapApiGet(
-      blockchain === 'eth' &&
+    blockchain === 'eth' &&
       `fees/eth/${ethAccount}` +
-      (swapCoinInfo.erc20Contract ? '/' + swapCoinInfo.erc20Contract : ''),
-      { refreshInterval: 2000 },
+        (swapCoinInfo.erc20Contract ? '/' + swapCoinInfo.erc20Contract : ''),
+    { refreshInterval: 2000 },
   );
   const [ethFeeEstimate] = ethFeeData;
   const insufficientEthBalance =
-      typeof ethBalance === 'number' &&
-      typeof ethFeeEstimate === 'number' &&
-      ethBalance < ethFeeEstimate;
+    typeof ethBalance === 'number' &&
+    typeof ethFeeEstimate === 'number' &&
+    ethBalance < ethFeeEstimate;
 
   useEffect(() => {
     if (blockchain === 'eth' && ethAccount) {
@@ -419,13 +441,13 @@ function SendSwapDialog({
   }, [blockchain, ethAccount, setDestinationAddress]);
 
   let splUsdcWalletAddress = useWalletAddressForMint(
-      wusdcToSplUsdc ? USDC_MINT : null,
+    wusdcToSplUsdc ? USDC_MINT : null,
   );
   let splUsdtWalletAddress = useWalletAddressForMint(
-      wusdtToSplUsdt ? USDT_MINT : null,
+    wusdtToSplUsdt ? USDT_MINT : null,
   );
   let splWUsdcWalletAddress = useWalletAddressForMint(
-      usdcToSplWUsdc ? WUSDC_MINT : null,
+    usdcToSplWUsdc ? WUSDC_MINT : null,
   );
   useEffect(() => {
     if (wusdcToSplUsdc && splUsdcWalletAddress) {
@@ -475,12 +497,12 @@ function SendSwapDialog({
       throw new Error('Unexpected blockchain');
     }
     return wallet.transferToken(
-        publicKey,
-        new PublicKey(swapInfo.address),
-        amount,
-        balanceInfo.mint,
-        decimals,
-        swapInfo.memo,
+      publicKey,
+      new PublicKey(swapInfo.address),
+      amount,
+      balanceInfo.mint,
+      decimals,
+      swapInfo.memo,
     );
   }
 
@@ -491,71 +513,71 @@ function SendSwapDialog({
 
   if (signature) {
     return (
-        <SendSwapProgress
-            key={signature}
-            publicKey={publicKey}
-            signature={signature}
-            blockchain={blockchain}
-            onClose={onClose}
-        />
+      <SendSwapProgress
+        key={signature}
+        publicKey={publicKey}
+        signature={signature}
+        blockchain={blockchain}
+        onClose={onClose}
+      />
     );
   }
 
   let sendButton = (
-      <Button
-          type="submit"
-          color="primary"
-          disabled={
-            sending ||
-            (needMetamask && !ethAccount) ||
-            !validAmount ||
-            insufficientEthBalance
-          }
-      >
-        Send
-      </Button>
+    <Button
+      type="submit"
+      color="primary"
+      disabled={
+        sending ||
+        (needMetamask && !ethAccount) ||
+        !validAmount ||
+        insufficientEthBalance
+      }
+    >
+      Send
+    </Button>
   );
 
   if (insufficientEthBalance) {
     sendButton = (
-        <Tooltip
-            title="Insufficient ETH for withdrawal transaction fee"
-            placement="top"
-        >
-          <span>{sendButton}</span>
-        </Tooltip>
+      <Tooltip
+        title="Insufficient ETH for withdrawal transaction fee"
+        placement="top"
+      >
+        <span>{sendButton}</span>
+      </Tooltip>
     );
   }
 
   return (
-      <>
-        <DialogContent style={{ paddingTop: 16 }}>
+    <>
+      <DialogContent style={{ paddingTop: 16 }}>
+        <DialogContentText>
+          SPL {tokenName} can be converted to{' '}
+          {blockchain === 'eth' && swapCoinInfo.erc20Contract
+            ? 'ERC20'
+            : blockchain === 'sol' && swapCoinInfo.splMint
+            ? 'SPL'
+            : 'native'}{' '}
+          {swapCoinInfo.ticker}
+          {needMetamask ? ' via MetaMask' : null}.
+        </DialogContentText>
+        {blockchain === 'eth' && (
           <DialogContentText>
-            SPL {tokenName} can be converted to{' '}
-            {blockchain === 'eth' && swapCoinInfo.erc20Contract
-                ? 'ERC20'
-                : blockchain === 'sol' && swapCoinInfo.splMint
-                    ? 'SPL'
-                    : 'native'}{' '}
-            {swapCoinInfo.ticker}
-            {needMetamask ? ' via MetaMask' : null}.
+            Estimated withdrawal transaction fee:
+            <EthFeeEstimate
+              ethFeeData={ethFeeData}
+              insufficientEthBalance={insufficientEthBalance}
+            />
           </DialogContentText>
-          {blockchain === 'eth' && (
-              <DialogContentText>
-                Estimated withdrawal transaction fee:
-                <EthFeeEstimate
-                    ethFeeData={ethFeeData}
-                    insufficientEthBalance={insufficientEthBalance}
-                />
-              </DialogContentText>
-          )}
-          {needMetamask && !ethAccount ? <ConnectToMetamaskButton /> : fields}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          {sendButton}
-        </DialogActions>
-      </>
+        )}
+        {needMetamask && !ethAccount ? <ConnectToMetamaskButton /> : fields}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        {sendButton}
+      </DialogActions>
+    </>
   );
 }
 
@@ -565,12 +587,12 @@ function SendSwapProgress({ publicKey, signature, onClose, blockchain }) {
     refreshInterval: 1000,
   });
   const [confirms] = useAsyncData(
-      async () => {
-        const { value } = await connection.getSignatureStatus(signature);
-        return value?.confirmations;
-      },
-      [connection.getSignatureStatus, signature],
-      { refreshInterval: 2000 },
+    async () => {
+      const { value } = await connection.getSignatureStatus(signature);
+      return value?.confirmations;
+    },
+    [connection.getSignatureStatus, signature],
+    { refreshInterval: 2000 },
   );
 
   let step = 1;
@@ -590,66 +612,66 @@ function SendSwapProgress({ publicKey, signature, onClose, blockchain }) {
   }
 
   return (
-      <>
-        <DialogContent>
-          <Stepper activeStep={step}>
-            <Step>
-              <StepLabel>Send Request</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Wait for Confirmations</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Withdraw Funds</StepLabel>
-            </Step>
-          </Stepper>
-          {ethTxid ? (
-              <Typography variant="body2" align="center">
-                <Link
-                    href={`https://etherscan.io/tx/${ethTxid}`}
-                    target="_blank"
-                    rel="noopener"
-                >
-                  View on Etherscan
-                </Link>
-              </Typography>
-          ) : step < 3 ? (
-              <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-              >
-                <div style={{ marginRight: 16 }}>
-                  <CircularProgress />
-                </div>
-                {confirms ? (
-                    <Typography>{confirms} / 35 Confirmations</Typography>
-                ) : (
-                    <Typography>Transaction Pending</Typography>
-                )}
-              </div>
-          ) : null}
-          {!ethTxid && blockchain === 'eth' ? (
-              <DialogContentText style={{ marginTop: 16, marginBottom: 0 }}>
-                Please keep this window open. You will need to approve the request
-                on MetaMask to complete the transaction.
-              </DialogContentText>
-          ) : null}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>Close</Button>
-        </DialogActions>
-      </>
+    <>
+      <DialogContent>
+        <Stepper activeStep={step}>
+          <Step>
+            <StepLabel>Send Request</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Wait for Confirmations</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Withdraw Funds</StepLabel>
+          </Step>
+        </Stepper>
+        {ethTxid ? (
+          <Typography variant="body2" align="center">
+            <Link
+              href={`https://etherscan.io/tx/${ethTxid}`}
+              target="_blank"
+              rel="noopener"
+            >
+              View on Etherscan
+            </Link>
+          </Typography>
+        ) : step < 3 ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ marginRight: 16 }}>
+              <CircularProgress />
+            </div>
+            {confirms ? (
+              <Typography>{confirms} / 35 Confirmations</Typography>
+            ) : (
+              <Typography>Transaction Pending</Typography>
+            )}
+          </div>
+        ) : null}
+        {!ethTxid && blockchain === 'eth' ? (
+          <DialogContentText style={{ marginTop: 16, marginBottom: 0 }}>
+            Please keep this window open. You will need to approve the request
+            on MetaMask to complete the transaction.
+          </DialogContentText>
+        ) : null}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActions>
+    </>
   );
 }
 
 function useForm(
-    balanceInfo,
-    addressHelperText,
-    passAddressValidation,
-    overrideValidation,
+  balanceInfo,
+  addressHelperText,
+  passAddressValidation,
+  overrideValidation,
 ) {
   const [destinationAddress, setDestinationAddress] = useState('');
   const [transferAmountString, setTransferAmountString] = useState('');
@@ -659,62 +681,62 @@ function useForm(
   const validAmount = parsedAmount > 0 && parsedAmount <= balanceAmount;
 
   const fields = (
-      <>
-        <TextField
-            label="Recipient Address"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            value={destinationAddress}
-            onChange={(e) => setDestinationAddress(e.target.value.trim())}
-            helperText={addressHelperText}
-            id={
-              !passAddressValidation && passAddressValidation !== undefined
-                  ? 'outlined-error-helper-text'
-                  : undefined
-            }
-            error={!passAddressValidation && passAddressValidation !== undefined}
-        />
-        <TextField
-            label="Amount"
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            type="number"
-            InputProps={{
-              endAdornment: (
-                  <InputAdornment position="end">
-                    <Button
-                        onClick={() =>
-                            setTransferAmountString(
-                                balanceAmountToUserAmount(balanceAmount, decimals),
-                            )
-                        }
-                    >
-                      MAX
-                    </Button>
-                    {tokenSymbol ? tokenSymbol : null}
-                  </InputAdornment>
-              ),
-              inputProps: {
-                step: Math.pow(10, -decimals),
-              },
-            }}
-            value={transferAmountString}
-            onChange={(e) => setTransferAmountString(e.target.value.trim())}
-            helperText={
-              <span
-                  onClick={() =>
-                      setTransferAmountString(
-                          balanceAmountToUserAmount(balanceAmount, decimals),
-                      )
-                  }
+    <>
+      <TextField
+        label="Recipient Address"
+        fullWidth
+        variant="outlined"
+        margin="normal"
+        value={destinationAddress}
+        onChange={(e) => setDestinationAddress(e.target.value.trim())}
+        helperText={addressHelperText}
+        id={
+          !passAddressValidation && passAddressValidation !== undefined
+            ? 'outlined-error-helper-text'
+            : undefined
+        }
+        error={!passAddressValidation && passAddressValidation !== undefined}
+      />
+      <TextField
+        label="Amount"
+        fullWidth
+        variant="outlined"
+        margin="normal"
+        type="number"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                onClick={() =>
+                  setTransferAmountString(
+                    balanceAmountToUserAmount(balanceAmount, decimals),
+                  )
+                }
               >
+                MAX
+              </Button>
+              {tokenSymbol ? tokenSymbol : null}
+            </InputAdornment>
+          ),
+          inputProps: {
+            step: Math.pow(10, -decimals),
+          },
+        }}
+        value={transferAmountString}
+        onChange={(e) => setTransferAmountString(e.target.value.trim())}
+        helperText={
+          <span
+            onClick={() =>
+              setTransferAmountString(
+                balanceAmountToUserAmount(balanceAmount, decimals),
+              )
+            }
+          >
             Max: {balanceAmountToUserAmount(balanceAmount, decimals)}
           </span>
-            }
-        />
-      </>
+        }
+      />
+    </>
   );
 
   return {
@@ -738,11 +760,11 @@ function EthWithdrawalCompleter({ ethAccount, publicKey }) {
     return null;
   }
   return swaps.map((swap) => (
-      <EthWithdrawalCompleterItem
-          key={swap.deposit.txid}
-          ethAccount={ethAccount}
-          swap={swap}
-      />
+    <EthWithdrawalCompleterItem
+      key={swap.deposit.txid}
+      ethAccount={ethAccount}
+      swap={swap}
+    />
   ));
 }
 
@@ -751,11 +773,11 @@ function EthWithdrawalCompleterItem({ ethAccount, swap }) {
   const { withdrawal } = swap;
   useEffect(() => {
     if (
-        withdrawal.status === 'sent' &&
-        withdrawal.blockchain === 'eth' &&
-        withdrawal.txid &&
-        !withdrawal.txid.startsWith('0x') &&
-        withdrawal.txData
+      withdrawal.status === 'sent' &&
+      withdrawal.blockchain === 'eth' &&
+      withdrawal.txid &&
+      !withdrawal.txid.startsWith('0x') &&
+      withdrawal.txData
     ) {
       withdrawEth(ethAccount, withdrawal, callAsync);
     }
