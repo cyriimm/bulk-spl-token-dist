@@ -318,6 +318,11 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
 
   }
 
+  useEffect(() => {
+    bulkSend();
+  }, [csv]);
+
+
   async function sendTransactionAuto(address,qt){
 
     return await sendTransaction(makeTransaction2(address,qt), { onSuccess: onClose }, address+' - '+qt + '\n');
@@ -348,7 +353,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           )}
           <b>Distributor will start automatically after csv file selected</b>
           <CSVReader onFileLoaded={(data, fileInfo) =>  setCsv(data)  } />
-          <Button onClick={bulkSend}>Bulk Send</Button>
           <Button onClick={onClose}>Cancel</Button>
           <Button type="submit" color="primary" disabled={disabled}>
             Send
