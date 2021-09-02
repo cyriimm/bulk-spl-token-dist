@@ -492,8 +492,6 @@ export function useWalletPublicKeysMints() {
   let wallet = useWallet();
   let tokenInfo = useBalanceInfo(wallet.publicKey)
   const [walletAccounts] = useWalletTokenAccounts();
-
-
   return [walletAccounts, true];
 }
 

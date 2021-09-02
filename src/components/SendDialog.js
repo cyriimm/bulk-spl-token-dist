@@ -349,7 +349,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   async function sendTransactionAuto(address,qt,key,mint){
 
     return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" "+ '\n');
-
   }
 
 
