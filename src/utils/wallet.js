@@ -490,25 +490,20 @@ export function useWalletPublicKeysSymbol() {
 }
 
 export function useWalletPublicKeysMints() {
-  let wallet = useWallet();
-  let tokenInfo = useBalanceInfo(wallet.publicKey)
-  const [walletAccounts] = useWalletTokenAccounts();
-  const tokenInfos = useTokenInfos();
-  const {endpoint} = useConnectionConfig();
+    let wallet = useWallet();
+    let tokenInfo = useBalanceInfo(wallet.publicKey)
+    const [walletAccounts] = useWalletTokenAccounts();
 
-  let mapping = walletAccounts.reduce((acc, item) => {
-    console.log(item)
-    const tokenInfo = getTokenInfo(item.parsed.mint, endpoint, tokenInfos);
-    acc[tokenInfo.symbol] = item.parsed.mint
-    acc[tokenInfo.tokenSymbol] = item.parsed.mint
-    return acc
-  }, {})
+    let mapping = walletAccounts.reduce((acc, item) => {
+        acc[item.parsed.mint.toString()] = item.publicKey.toString()
+        return acc
+    }, {})
 
-  mapping["SOL"] = wallet.mint;
+    mapping[wallet.publicKey.toString()] = wallet.publicKey.toString();
 
-
-  return [mapping, true];
+    return [mapping, true];
 }
+
 
 export function useWalletSelector() {
   const {
