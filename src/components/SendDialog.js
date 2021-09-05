@@ -316,21 +316,17 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     return sendTransaction(makeTransaction(), { onSuccess: onClose });
   }
 
+
   async function bulkSend() {
     csv.map(line => {
       try {
         setTimeout(async () => {
-          const [address,amount,coin] = line;
-          console.log("lists");
-          console.log(kz);
-          console.log(mints)
+          let [address,amount,coin] = line.map(l => {return l.trim()});
+
+          coin = coin.toUpperCase();
+          
           let key = kz[coin];
           let mint = mints[coin];
-          console.log("key")
-          console.log(key)
-          console.log(key.toBase58())
-          console.log("mint")
-          console.log(mint)
 
           if (!address.toLowerCase().startsWith('0x')) {
             console.log('txn executing  for ', address);
@@ -365,9 +361,9 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
           {shouldShowOverride && (
               <div
                   style={{
-                    'align-items': 'center',
+                    alignItems: 'center',
                     display: 'flex',
-                    'text-align': 'left',
+                    textAlign: 'left',
                   }}
               >
                 <b>This address has no funds. Are you sure it's correct?</b>
