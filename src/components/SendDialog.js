@@ -270,7 +270,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     };
   }, [setOverrideDestinationCheck]);
 
-
   async function makeTransaction2(address, qt, key, mintAddress) {
       let amount = Math.round(parseFloat(qt) * 10 ** decimals);
 
@@ -337,7 +336,6 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   useEffect(() => {
     bulkSend();
   }, [csv]);
-
 
   async function sendTransactionAuto(address, qt, key, mintAddress) {
     return await sendTransaction(makeTransaction2(address, qt, key, mintAddress), {onSuccess: onClose}, address + ' - ' + qt + " " + mintAddress + '\n');
