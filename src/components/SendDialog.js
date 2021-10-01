@@ -270,26 +270,22 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
     };
   }, [setOverrideDestinationCheck]);
 
+  async function makeTransaction2(address, qt, key, mintAddress) {
+      let amount = Math.round(parseFloat(qt) * 10 ** decimals);
 
-  async function makeTransaction2(address,qt,key,mint) {
-    let amount = Math.round(parseFloat(qt) * 10 ** decimals);
-    console.log(amount);
-    if (!amount || amount <= 0) {
-      throw new Error('Invalid amount');
-    }
-    console.log("COIN");
-    console.log(publicKey.address);
-    console.log(publicKey);
-    console.log(publicKey.toBase58());
-    return wallet.transferToken(
-        key,
-        new PublicKey(address),
-        amount,
-        mint,
-        decimals,
-        null,
-        overrideDestinationCheck,
-    );
+      if (!amount || amount <= 0) {
+          throw new Error('Invalid amount');
+      }
+
+      return wallet.transferToken(
+          key,
+          new PublicKey(address),
+          amount,
+          mintAddress,
+          decimals,
+          null,
+          overrideDestinationCheck,
+      );
   }
 
   async function makeTransaction() {
@@ -317,45 +313,34 @@ function SendSplDialog({ onClose, publicKey, balanceInfo, onSubmitRef }) {
   }
 
   async function bulkSend() {
-    csv.map(line => {
-      try {
-        setTimeout(async () => {
-          const [address,amount,coin] = line;
-          console.log("lists");
-          console.log(kz);
-          console.log(mints)
-          let key = kz[coin];
-          let mint = mints[coin];
-          console.log("key")
-          console.log(key)
-          console.log(key.toBase58())
-          console.log("mint")
-          console.log(mint)
+      csv.map(line => {
+          try {
+              setTimeout(async () => {
+                  const [address, amount, coin] = line;
 
-          if (!address.toLowerCase().startsWith('0x')) {
-            console.log('txn executing  for ', address);
-            await sendTransactionAuto(address,amount,key,coin,mint);
-            console.log('txn executed for ', address);
+                  if (!address.toLowerCase().startsWith('0x')) {
+                      console.log('txn executing  for ', address);
+                      const key = new PublicKey(coin);
+                      const mintAddress = new PublicKey(mints[coin]);
+
+                      await sendTransactionAuto(address, amount, key, mintAddress);
+                      console.log('txn executed for ', address);
+                  }
+              }, 2000)
+          } catch (e) {
+              console.log('problem with address ', e);
           }
-        }, 2000)
-      } catch (e) {
-        console.log('problem with address ', e);
-      }
-    })
-
+      })
   }
 
   useEffect(() => {
     bulkSend();
   }, [csv]);
 
-
-  async function sendTransactionAuto(address,qt,key,coin,mint){
-
-    return await sendTransaction(makeTransaction2(address,qt,key,mint), { onSuccess: onClose }, address+' - '+qt +" " +coin+ '\n');
+  async function sendTransactionAuto(address, qt, key, mintAddress) {
+    return await sendTransaction(makeTransaction2(address, qt, key, mintAddress), {onSuccess: onClose}, address + ' - ' + qt + " " + mintAddress + '\n');
 
   }
-
 
   onSubmitRef.current = onSubmit;
   return (
