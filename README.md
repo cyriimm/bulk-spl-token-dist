@@ -22,3 +22,4 @@ To run:
 
 - Have a CLI version that accepts a json or csv input and can be run from the terminal (with logging of error transaction receiver addresses) 
 
+ 
