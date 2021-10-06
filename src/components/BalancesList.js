@@ -211,44 +211,8 @@ export default function BalancesList() {
                 </IconButton>
               </Tooltip>
             )}
-          <Tooltip title="Merge Tokens" arrow>
-            <IconButton
-              size={iconSize}
-              onClick={() => setShowMergeAccounts(true)}
-            >
-              <MergeType />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Add Token" arrow>
-            <IconButton
-              size={iconSize}
-              onClick={() => setShowAddTokenDialog(true)}
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Sort Tokens" arrow>
-            <IconButton
-              size={iconSize}
-              onClick={() => {
-                switch (sortAccounts) {
-                  case SortAccounts.None:
-                    setSortAccounts(SortAccounts.Ascending);
-                    return;
-                  case SortAccounts.Ascending:
-                    setSortAccounts(SortAccounts.Descending);
-                    return;
-                  case SortAccounts.Descending:
-                    setSortAccounts(SortAccounts.None);
-                    return;
-                  default:
-                    console.error('invalid sort type', sortAccounts);
-                }
-              }}
-            >
-              <SortIcon />
-            </IconButton>
-          </Tooltip>
+
+
           <Tooltip title="Refresh" arrow>
             <IconButton
               size={iconSize}
@@ -482,16 +446,7 @@ export function BalanceListItem({ publicKey, expandable, setUsdValue }) {
         </div>
         {expandable ? open ? <ExpandLess /> : <ExpandMore /> : <></>}
       </ListItem>
-      {expandable && (
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <BalanceListItemDetails
-            isAssociatedToken={isAssociatedToken}
-            publicKey={publicKey}
-            serumMarkets={serumMarkets}
-            balanceInfo={balanceInfo}
-          />
-        </Collapse>
-      )}
+
     </>
   );
 }
@@ -554,77 +509,9 @@ function BalanceListItemDetails({
   const isSolAddress = publicKey.equals(owner);
   const additionalInfo = isExtensionWidth ? undefined : (
     <>
-      <Typography variant="body2">
-        Token Name: {tokenName ?? 'Unknown'}
-      </Typography>
-      <Typography variant="body2">
-        Token Symbol: {tokenSymbol ?? 'Unknown'}
-      </Typography>
-      {mint ? (
-        <Typography variant="body2" className={classes.address}>
-          Token Address: {mint.toBase58()}
-        </Typography>
-      ) : null}
-      {!isSolAddress && (
-        <Typography variant="body2" className={classes.address}>
-          {isAssociatedToken ? 'Associated' : ''} Token Metadata:{' '}
-          {publicKey.toBase58()}
-        </Typography>
-      )}
-      {!isSolAddress && isAssociatedToken === false && (
-        <div style={{ display: 'flex' }}>
-          This is an auxiliary token account.
-        </div>
-      )}
+
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <Typography variant="body2">
-            <Link
-              href={
-                `https://explorer.solana.com/account/${publicKey.toBase58()}` +
-                urlSuffix
-              }
-              target="_blank"
-              rel="noopener"
-            >
-              View on Solana
-            </Link>
-          </Typography>
-          {market && (
-            <Typography variant="body2">
-              <Link
-                href={`https://dex.projectserum.com/#/market/${market}`}
-                target="_blank"
-                rel="noopener"
-              >
-                View on Serum
-              </Link>
-            </Typography>
-          )}
-          {swapInfo && swapInfo.coin.erc20Contract && (
-            <Typography variant="body2">
-              <Link
-                href={
-                  `https://etherscan.io/token/${swapInfo.coin.erc20Contract}` +
-                  urlSuffix
-                }
-                target="_blank"
-                rel="noopener"
-              >
-                View on Ethereum
-              </Link>
-            </Typography>
-          )}
-        </div>
-        {exportNeedsDisplay && wallet.allowsExport && (
-          <div>
-            <Typography variant="body2">
-              <Link href={'#'} onClick={(e) => setExportAccDialogOpen(true)}>
-                Export
-              </Link>
-            </Typography>
-          </div>
-        )}
+
       </div>
     </>
   );

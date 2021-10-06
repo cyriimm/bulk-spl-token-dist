@@ -7,8 +7,7 @@ To run:
 - Login with sollet
 - Select a token 
 - Select Send
-- Enter an Amount (This will be the amount sent per wallet) 
-- Upload a csv( comma separated) file of public keys to send to 
+- Upload a csv( comma separated) file of public keys to send to. The content of the file should be in the format - Address, Amount, Coin.
 - The process of bulk sending will begin thereafter (there is no need to click on 'Send') 
 - If a transaction(tx) fails the receiver address will be logged in the error box 
 
@@ -22,4 +21,3 @@ To run:
 
 - Have a CLI version that accepts a json or csv input and can be run from the terminal (with logging of error transaction receiver addresses) 
 
- 
